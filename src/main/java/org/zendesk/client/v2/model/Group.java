@@ -1,5 +1,6 @@
 package org.zendesk.client.v2.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
@@ -52,6 +53,7 @@ public class Group implements SearchResultEntity {
     }
 
     @JsonProperty("created_at")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss'Z'", timezone="UTC")
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -61,6 +63,7 @@ public class Group implements SearchResultEntity {
     }
 
     @JsonProperty("deleted_at")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss'Z'", timezone="UTC")
     public Date getUpdatedAt() {
         return updatedAt;
     }

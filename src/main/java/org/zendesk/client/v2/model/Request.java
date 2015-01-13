@@ -1,5 +1,6 @@
 package org.zendesk.client.v2.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.zendesk.client.v2.model.Ticket.Requester;
 
@@ -34,6 +35,7 @@ public class Request implements Serializable {
     protected Type type;
 
     @JsonProperty("created_at")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss'Z'", timezone="UTC")
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -97,6 +99,7 @@ public class Request implements Serializable {
     }
 
     @JsonProperty("updated_at")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss'Z'", timezone="UTC")
     public Date getUpdatedAt() {
         return updatedAt;
     }

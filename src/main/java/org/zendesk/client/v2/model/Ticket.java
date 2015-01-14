@@ -35,16 +35,16 @@ public class Ticket extends Request implements SearchResultEntity {
     public Ticket() {
     }
 
-    public Ticket(Requester requester, String subject, Comment comment) {
+    public Ticket(Requester requester, String subject, String description) {
         this.subject = subject;
         this.requester = requester;
-        this.comment = comment;
+        this.description = description;
     }
 
-    public Ticket(long requesterId, String subject, Comment comment) {
+    public Ticket(long requesterId, String subject, String description) {
         this.subject = subject;
         this.requesterId = requesterId;
-        this.comment = comment;
+        this.description = description;
     }
 
     @JsonProperty("assignee_id")

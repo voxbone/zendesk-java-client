@@ -183,7 +183,7 @@ public class RealSmokeTest {
         assumeThat("Must have a requester email", config.getProperty("requester.email"), notNullValue());
         Ticket t = new Ticket(
                 new Ticket.Requester(config.getProperty("requester.name"), config.getProperty("requester.email")),
-                "This is a test", new Comment("Please ignore this ticket"));
+                "This is a test", "Please ignore this ticket");
         Ticket ticket = instance.createTicket(t);
         System.out.println(ticket.getId() + " -> " + ticket.getUrl());
         assertThat(ticket.getId(), notNullValue());
@@ -197,7 +197,7 @@ public class RealSmokeTest {
         assertThat(ticket.getSubject(), is(t.getSubject()));
         assertThat(ticket.getRequester(), nullValue());
         assertThat(ticket.getRequesterId(), notNullValue());
-        assertThat(ticket.getDescription(), is(t.getComment().getBody()));
+        assertThat(ticket.getDescription(), is(t.getDescription()));
         assertThat(instance.getTicket(ticket.getId()), nullValue());
     }
 
@@ -210,7 +210,7 @@ public class RealSmokeTest {
         do {
             Ticket t = new Ticket(
                     new Ticket.Requester(config.getProperty("requester.name"), config.getProperty("requester.email")),
-                    "This is a test " + UUID.randomUUID().toString(), new Comment("Please ignore this ticket"));
+                    "This is a test " + UUID.randomUUID().toString(), "Please ignore this ticket");
             ticket = instance.createTicket(t);
             System.out.println(ticket.getId() + " -> " + ticket.getUrl());
             assertThat(ticket.getId(), notNullValue());
@@ -223,7 +223,7 @@ public class RealSmokeTest {
             assertThat(ticket.getSubject(), is(t.getSubject()));
             assertThat(ticket.getRequester(), nullValue());
             assertThat(ticket.getRequesterId(), notNullValue());
-            assertThat(ticket.getDescription(), is(t.getComment().getBody()));
+            assertThat(ticket.getDescription(), is(t.getDescription()));
             assertThat(instance.getTicket(ticket.getId()), notNullValue());
         } while (ticket.getId() < 200L); // seed enough data for the paging tests
     }

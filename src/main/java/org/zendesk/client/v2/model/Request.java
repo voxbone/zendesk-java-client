@@ -21,7 +21,6 @@ public class Request {
     protected Via via;
     protected Date createdAt;
     protected Date updatedAt;
-    protected Comment comment;
 
     @JsonProperty("created_at")
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss'Z'", timezone="UTC")
@@ -111,13 +110,5 @@ public class Request {
 
     public void setVia(Via via) {
         this.via = via;
-    }
-
-    public Comment getComment() {
-        return comment;
-    }
-
-    public void setComment(Comment comment) {
-        this.comment = comment;
     }
 }

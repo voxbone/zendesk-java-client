@@ -347,6 +347,12 @@ public class Zendesk implements Closeable {
                 Collections.singletonMap("tickets", tickets))), handleJobStatus());
     }
 
+    public Ticket importTicket(ImportTicket importTicket) {
+        return complete(submit(req("POST", cnst("/imports/tickets.json"),
+                        JSON, json(Collections.singletonMap("ticket", importTicket))),
+                handle(Ticket.class, "ticket")));
+    }
+
     public Ticket updateTicket(Ticket ticket) {
         checkHasId(ticket);
         return complete(submit(req("PUT", tmpl("/tickets/{id}.json").set("id", ticket.getId()),

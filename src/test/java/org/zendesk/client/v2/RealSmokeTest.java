@@ -455,7 +455,7 @@ public class RealSmokeTest {
             assertThat(ticket.getSubject(), is(t.getSubject()));
             assertThat(ticket.getRequester(), nullValue());
             assertThat(ticket.getRequesterId(), notNullValue());
-            assertThat(ticket.getDescription(), is(t.getComment().getBody()));
+            assertThat(ticket.getDescription(), is(t.getDescription()));
             assertThat(instance.getTicket(ticket.getId()), notNullValue());
             firstId = Math.min(ticket.getId(), firstId);
         } while (ticket.getId() < firstId + 5L); // seed enough data for the paging tests

@@ -4,21 +4,11 @@ import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.zendesk.client.v2.model.Audit;
-import org.zendesk.client.v2.model.Comment;
-import org.zendesk.client.v2.model.Field;
-import org.zendesk.client.v2.model.Group;
-import org.zendesk.client.v2.model.Identity;
-import org.zendesk.client.v2.model.Organization;
-import org.zendesk.client.v2.model.Request;
-import org.zendesk.client.v2.model.Status;
-import org.zendesk.client.v2.model.Ticket;
-import org.zendesk.client.v2.model.User;
+import org.zendesk.client.v2.model.*;
 import org.zendesk.client.v2.model.events.Event;
 
-import java.util.Collections;
-import java.util.Properties;
-import java.util.UUID;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -227,6 +217,41 @@ public class RealSmokeTest {
             assertThat(instance.getTicket(ticket.getId()), notNullValue());
         } while (ticket.getId() < 200L); // seed enough data for the paging tests
     }
+
+    @Test
+    @Ignore("Don't spam zendesk")
+    public void importTickets() throws Exception {
+        createClientWithTokenOrPassword();
+        assumeThat("Must have a requester email", config.getProperty("requester.email"), notNullValue());
+        Ticket ticket;
+        SimpleDateFormat isoFormat = new SimpleDateFormat("yyyyMMddhh:mm");
+        isoFormat.setTimeZone(TimeZone.getTimeZone("CET"));
+
+        List<Comment> comments = new ArrayList<Comment>();
+        comments.add(new Comment("This is the first comment"));
+        comments.add(new Comment("This is the second comment"));
+        ImportTicket importTicket = new ImportTicket(
+                new Ticket.Requester(config.getProperty("requester.name"), config.getProperty("requester.email")),
+                "This is a test " + UUID.randomUUID().toString(), comments);
+        importTicket.setCreatedAt(isoFormat.parse("2014010110:00"));
+        importTicket.setSolvedAt(isoFormat.parse("2014111110:00"));
+        importTicket.setStatus(Status.CLOSED);
+
+        ticket = instance.importTicket(importTicket);
+        System.out.println(ticket.getId() + " -> " + ticket.getUrl());
+        assertThat(ticket.getId(), notNullValue());
+        Ticket t2 = instance.getTicket(ticket.getId());
+        assertThat(t2, notNullValue());
+        assertThat(t2.getId(), is(ticket.getId()));
+        assertThat(ticket.getSubject(), is(importTicket.getSubject()));
+        assertThat(ticket.getRequester(), nullValue());
+        assertThat(ticket.getRequesterId(), notNullValue());
+        assertThat(ticket.getDescription(), is(importTicket.getComments().get(0).getBody()));
+        assertThat(ticket.getStatus(), is(Status.CLOSED));
+        assertThat(ticket.getCreatedAt(), is(importTicket.getCreatedAt()));
+        assertThat(instance.getTicketComments(ticket.getId()), notNullValue());
+    }
+
 
     @Test
     public void lookupUserByEmail() throws Exception {

@@ -922,7 +922,7 @@ public class Zendesk implements Closeable {
     }
 
     public Iterable<User> lookupUserByEmail(String email) {
-        return new PagedIterable<>(tmpl("/users/search.json{?query}").set("query", email),
+        return new PagedIterable<>(tmpl("/users/search.json{?query}").set("query", "email:" + email),
                 handleList(User.class, "users"));
     }
 

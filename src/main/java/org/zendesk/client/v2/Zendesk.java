@@ -6,27 +6,15 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.ning.http.client.AsyncCompletionHandler;
-import com.ning.http.client.AsyncHttpClient;
-import com.ning.http.client.ListenableFuture;
-import com.ning.http.client.Realm;
+import com.ning.http.client.*;
 import com.ning.http.client.Request;
-import com.ning.http.client.RequestBuilder;
-import com.ning.http.client.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zendesk.client.v2.model.*;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 
@@ -396,7 +384,7 @@ public class Zendesk implements Closeable {
     }
 
     public Iterable<User> lookupUserByEmail(String email) {
-        return new PagedIterable<User>(tmpl("/users/search.json{?query}").set("query", email),
+        return new PagedIterable<User>(tmpl("/users/search.json{?query}").set("query", "email:" + email),
                 handleList(User.class, "users"));
     }
 
@@ -960,7 +948,7 @@ public class Zendesk implements Closeable {
             builder.addHeader("Authorization", "Bearer " + oauthToken);
         }
         builder.addQueryParameter("page", Integer.toString(page));
-        builder.setUrl(template.toString().replace("%2B", "+")); //replace out %2B with + due to API restriction
+        builder.setUrl(template.toString());
         return builder.build();
     }
 

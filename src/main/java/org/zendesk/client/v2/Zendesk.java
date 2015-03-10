@@ -881,7 +881,7 @@ public class Zendesk implements Closeable {
             return Collections.emptyList();
         }
         return new PagedIterable<T>(tmpl("/search.json{?query,params}")
-                .set("query", query + "+type:" + typeName)
+                .set("query", query + " type:" + typeName)
                 .set("params", params),
                 handleList(type, "results"));
     }

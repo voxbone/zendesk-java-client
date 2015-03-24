@@ -181,7 +181,7 @@ public class Zendesk implements Closeable {
 
 
     public Iterable<Ticket> getTicketsFromSearch(String searchTerm) {
-        return new PagedIterable<Ticket>(tmpl("/search.json{?query}").set("query", searchTerm + " type:ticket"),
+        return new PagedIterable<Ticket>(tmpl("/search.json{?query}{&type}").set("query", searchTerm).set("type", "ticket"),
                 handleList(Ticket.class, "results"));
     }
 
@@ -890,9 +890,10 @@ public class Zendesk implements Closeable {
         if (typeName == null) {
             return Collections.emptyList();
         }
-        return new PagedIterable<T>(tmpl("/search.json{?query,params}")
-                .set("query", query + " type:" + typeName)
-                .set("params", params),
+        return new PagedIterable<T>(tmpl("/search.json{?query,params}{&type}")
+                .set("query", query)
+                .set("params", params)
+                .set("type", typeName),
                 handleList(type, "results"));
     }
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -11,6 +12,9 @@ import java.util.List;
  * @since 05/04/2013 11:56
  */
 public class ChangeEvent extends CreateEvent {
+
+    private static final long serialVersionUID = 1L;
+
     private List<String> previousValue;
 
     @JsonProperty("previous_value")
@@ -28,17 +32,15 @@ public class ChangeEvent extends CreateEvent {
         if (previousValue == null) {
             this.previousValue = null;
         } else if (previousValue instanceof List) {
-            this.previousValue = new ArrayList<String>();
-            for (Object o : (List) previousValue) {
+            this.previousValue = new ArrayList<>();
+            for (Object o : (List<?>) previousValue) {
                 this.previousValue.add(o == null || o instanceof String ? (String) o : o.toString());
             }
         } else if (previousValue instanceof String[]) {
-            this.previousValue = new ArrayList<String>();
-            for (String s : (String[]) previousValue) {
-                this.previousValue.add(s);
-            }
+            this.previousValue = new ArrayList<>();
+            Collections.addAll(this.previousValue, (String[]) previousValue);
         } else if (previousValue instanceof Object[]) {
-            this.previousValue = new ArrayList<String>();
+            this.previousValue = new ArrayList<>();
             for (Object o : (Object[]) previousValue) {
                 this.previousValue.add(o == null || o instanceof String ? (String) o : o.toString());
             }
@@ -67,7 +69,7 @@ public class ChangeEvent extends CreateEvent {
         if (previousValue == null) {
             this.previousValue = null;
         } else {
-            this.previousValue = new ArrayList<String>();
+            this.previousValue = new ArrayList<>();
             this.previousValue.add(previousValue);
         }
     }

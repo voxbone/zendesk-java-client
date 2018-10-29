@@ -3,16 +3,20 @@ package org.zendesk.client.v2.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @author stephenc
  * @since 09/04/2013 14:37
  */
-public class Identity {
+public class Identity implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private Long id;
     private String url;
-    private Integer userId;
+    private Long userId;
     private String type;
     private String value;
     private Boolean verified;
@@ -61,11 +65,11 @@ public class Identity {
     }
 
     @JsonProperty("user_id")
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -103,5 +107,20 @@ public class Identity {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public String toString() {
+        return "Identity{" +
+                "id=" + id +
+                ", url='" + url + '\'' +
+                ", userId=" + userId +
+                ", type='" + type + '\'' +
+                ", value='" + value + '\'' +
+                ", verified=" + verified +
+                ", primary=" + primary +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
     }
 }

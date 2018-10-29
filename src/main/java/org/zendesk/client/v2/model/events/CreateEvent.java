@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -11,6 +12,9 @@ import java.util.List;
  * @since 05/04/2013 11:56
  */
 public class CreateEvent extends Event {
+
+    private static final long serialVersionUID = 1L;
+
     private String fieldName;
     private List<String> value;
 
@@ -38,17 +42,15 @@ public class CreateEvent extends Event {
         if (value == null) {
             this.value = null;
         } else if (value instanceof List) {
-            this.value = new ArrayList<String>();
-            for (Object o : (List) value) {
+            this.value = new ArrayList<>();
+            for (Object o : (List<?>) value) {
                 this.value.add(o == null || o instanceof String ? (String) o : o.toString());
             }
         } else if (value instanceof String[]) {
-            this.value = new ArrayList<String>();
-            for (String s : (String[]) value) {
-                this.value.add(s);
-            }
+            this.value = new ArrayList<>();
+            Collections.addAll(this.value, (String[]) value);
         } else if (value instanceof Object[]) {
-            this.value = new ArrayList<String>();
+            this.value = new ArrayList<>();
             for (Object o : (Object[]) value) {
                 this.value.add(o == null || o instanceof String ? (String) o : o.toString());
             }
@@ -77,7 +79,7 @@ public class CreateEvent extends Event {
         if (value == null) {
             this.value = null;
         } else {
-            this.value = new ArrayList<String>();
+            this.value = new ArrayList<>();
             this.value.add(value);
         }
     }

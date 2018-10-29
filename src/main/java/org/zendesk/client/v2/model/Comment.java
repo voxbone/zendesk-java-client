@@ -3,6 +3,7 @@ package org.zendesk.client.v2.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -11,9 +12,13 @@ import java.util.List;
  * @author stephenc
  * @since 09/04/2013 15:09
  */
-public class Comment {
+public class Comment implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private Long id;
     private String body;
+    private String htmlBody;
     private Long authorId;
     private List<String> uploads;
     private List<Attachment> attachments;
@@ -38,6 +43,15 @@ public class Comment {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    @JsonProperty("html_body")
+    public String getHtmlBody() {
+        return htmlBody;
+    }
+
+    public void setHtmlBody(String htmlBody) {
+        this.htmlBody = htmlBody;
     }
 
     public List<String> getUploads() {

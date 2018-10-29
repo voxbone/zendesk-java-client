@@ -3,10 +3,14 @@ package org.zendesk.client.v2.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class Forum {
+public class Forum implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private Long id;
     private String url;
     private String name;
@@ -152,14 +156,14 @@ public class Forum {
         this.updatedAt = updatedAt;
     }
 
-    public static enum Access {
+    public enum Access {
         EVERYBODY("everybody"),
         LOGGED_IN("logged-in users"),
         AGENTS_ONLY("agents only");
 
         private final String name;
 
-        private Access(String name) {
+        Access(String name) {
             this.name = name;
         }
 

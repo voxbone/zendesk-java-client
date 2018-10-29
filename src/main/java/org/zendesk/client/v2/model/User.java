@@ -3,6 +3,7 @@ package org.zendesk.client.v2.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -13,10 +14,12 @@ import java.util.Map;
  * @author stephenc
  * @since 05/04/2013 15:32
  */
-public class User implements SearchResultEntity {
+public class User extends Collaborator implements SearchResultEntity, Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private Long id;
     private String url;
-    private String name;
     private String externalId;
     private String alias;
     private Date createdAt;
@@ -25,10 +28,11 @@ public class User implements SearchResultEntity {
     private Boolean verified;
     private Boolean shared;
     private Long localeId;
+    private String locale;
     private String timeZone;
     private Date lastLoginAt;
-    private String email;
     private String phone;
+    private Boolean restrictedAgent;
     private String signature;
     private String details;
     private String notes;
@@ -49,36 +53,34 @@ public class User implements SearchResultEntity {
     }
 
     public User(Boolean verified, String name, String email) {
-        this.name = name;
-        this.email = email;
+        super(name, email);
         this.verified = verified;
     }
 
     public User(Boolean verified, String name, List<Identity> identities) {
+        super(name);
         this.verified = verified;
-        this.name = name;
         this.identities = identities;
     }
 
     public User(Boolean verified, String name, Identity... identities) {
+        super(name);
         this.verified = verified;
-        this.name = name;
-        this.identities = new ArrayList<Identity>(Arrays.asList(identities));
+        this.identities = new ArrayList<>(Arrays.asList(identities));
     }
 
     public User(String name, String email) {
-        this.name = name;
-        this.email = email;
+        super(name, email);
     }
 
     public User(String name, List<Identity> identities) {
-        this.name = name;
+        super(name);
         this.identities = identities;
     }
 
     public User(String name, Identity... identities) {
-        this.name = name;
-        this.identities = new ArrayList<Identity>(Arrays.asList(identities));
+        super(name);
+        this.identities = new ArrayList<>(Arrays.asList(identities));
     }
 
     public List<Identity> getIdentities() {
@@ -132,14 +134,6 @@ public class User implements SearchResultEntity {
         this.details = details;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     @JsonProperty("external_id")
     public String getExternalId() {
         return externalId;
@@ -176,20 +170,21 @@ public class User implements SearchResultEntity {
         this.localeId = localeId;
     }
 
+    @JsonProperty("locale")
+    public String getLocale() {
+      return locale;
+    }
+
+    public void setLocale(String locale) {
+      this.locale = locale;
+    }
+
     public Boolean getModerator() {
         return moderator;
     }
 
     public void setModerator(Boolean moderator) {
         this.moderator = moderator;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getNotes() {
@@ -336,4 +331,12 @@ public class User implements SearchResultEntity {
         this.remotePhotoUrl = remotePhotoUrl;
     }
 
+    @JsonProperty("restricted_agent")
+    public Boolean getRestrictedAgent() {
+        return restrictedAgent;
+    }
+
+    public void setRestrictedAgent(Boolean restrictedAgent) {
+        this.restrictedAgent = restrictedAgent;
+    }
 }

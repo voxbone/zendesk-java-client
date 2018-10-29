@@ -2,8 +2,10 @@ package org.zendesk.client.v2.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import org.zendesk.client.v2.model.events.Event;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +14,10 @@ import java.util.Map;
  * @author stephenc
  * @since 05/04/2013 10:22
  */
-public class Audit {
+public class Audit implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private Long id;
     private Long ticketId;
     private Map<String, Object> metadata;

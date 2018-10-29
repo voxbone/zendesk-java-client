@@ -13,6 +13,9 @@ import java.util.List;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Ticket extends Request implements SearchResultEntity {
+
+    private static final long serialVersionUID = 1L;
+
     private String externalId;
     private Type type;
     private Priority priority;
@@ -21,6 +24,7 @@ public class Ticket extends Request implements SearchResultEntity {
     private Long assigneeId;
     private Long groupId;
     private List<Long> collaboratorIds;
+    private List<Collaborator> collaborators;
     private Long forumTopicId;
     private Long problemId;
     private boolean hasIncidents;
@@ -31,6 +35,8 @@ public class Ticket extends Request implements SearchResultEntity {
     private List<Long> sharingAgreementIds;
     private List<Long> followupIds;
     private Long ticketFormId;
+    private Long brandId;
+    private Boolean isPublic;
 
     public Ticket() {
     }
@@ -63,6 +69,15 @@ public class Ticket extends Request implements SearchResultEntity {
 
     public void setCollaboratorIds(List<Long> collaboratorIds) {
         this.collaboratorIds = collaboratorIds;
+    }
+
+    @JsonProperty("collaborators")
+    private List<Collaborator> getCollaborators() {
+        return collaborators;
+    }
+
+    public void setCollaborators(List<Collaborator> collaborators) {
+        this.collaborators = collaborators;
     }
 
     @JsonProperty("custom_fields")
@@ -154,6 +169,15 @@ public class Ticket extends Request implements SearchResultEntity {
         this.recipient = recipient;
     }
 
+    @JsonProperty("brand_id")
+    public Long getBrandId() {
+        return brandId;
+    }
+
+    public void setBrandId(Long brandId) {
+        this.brandId = brandId;
+    }
+
     public Requester getRequester() {
         return requester;
     }
@@ -217,6 +241,15 @@ public class Ticket extends Request implements SearchResultEntity {
         this.type = type;
     }
 
+    @JsonProperty("is_public")
+    public Boolean getIsPublic() {
+        return isPublic;
+    }
+
+    public void setIsPublic(Boolean isPublic) {
+        this.isPublic = isPublic;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
@@ -247,6 +280,8 @@ public class Ticket extends Request implements SearchResultEntity {
         sb.append(", sharingAgreementIds=").append(sharingAgreementIds);
         sb.append(", followupIds=").append(followupIds);
         sb.append(", ticketFormId=").append(ticketFormId);
+        sb.append(", brandId=").append(brandId);
+        sb.append(", isPublic=").append(isPublic);
         sb.append(", createdAt=").append(createdAt);
         sb.append(", updatedAt=").append(updatedAt);
         sb.append('}');

@@ -3,6 +3,7 @@ package org.zendesk.client.v2.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +12,10 @@ import java.util.Map;
  * @author stephenc
  * @since 22/04/2013 15:38
  */
-public class Organization implements SearchResultEntity {
+public class Organization implements SearchResultEntity, Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private Long id;
     private String externalId;
     private String name;
@@ -158,6 +162,7 @@ public class Organization implements SearchResultEntity {
         sb.append(", sharedTickets=").append(sharedTickets);
         sb.append(", sharedComments=").append(sharedComments);
         sb.append(", tags=").append(tags);
+        sb.append(", organizationFields=").append(organizationFields);
         sb.append('}');
         return sb.toString();
     }

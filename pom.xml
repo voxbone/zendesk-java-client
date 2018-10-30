@@ -14,8 +14,9 @@
   ~ limitations under the License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <groupId>com.cloudbees</groupId>
@@ -27,49 +28,49 @@
   <artifactId>zendesk-java-client</artifactId>
   <version>0.14.1-voxbone-0.0.3-SNAPSHOT</version>
 
-  <name>zendesk-java-client</name>
-  <description>Java client for the Zendesk API</description>
-  <url>https://github.com/cloudbees/zendesk-java-client</url>
-  <inceptionYear>2013</inceptionYear>
-  <licenses>
-    <license>
-      <name>The Apache Software License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
+    <name>zendesk-java-client</name>
+    <description>Java client for the Zendesk API</description>
+    <url>https://github.com/cloudbees/zendesk-java-client</url>
+    <inceptionYear>2013</inceptionYear>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
-  <developers>
-    <developer>
-      <name>Stephen Connolly</name>
-    </developer>
-    <developer>
-      <name>Johno Crawford</name>
-    </developer>
-    <developer>
-      <name>Matt Tucker</name>
-    </developer>
-    <developer>
-      <name>Yoann Dubreuil</name>
-    </developer>
-    <developer>
-      <name>Arnaud Héritier</name>
-    </developer>
-  </developers>
+    <developers>
+        <developer>
+            <name>Stephen Connolly</name>
+        </developer>
+        <developer>
+            <name>Johno Crawford</name>
+        </developer>
+        <developer>
+            <name>Matt Tucker</name>
+        </developer>
+        <developer>
+            <name>Yoann Dubreuil</name>
+        </developer>
+        <developer>
+            <name>Arnaud Héritier</name>
+        </developer>
+    </developers>
 
-  <mailingLists>
-    <mailingList>
-      <name>Zendesk Java Client User List</name>
-      <subscribe>zendesk-java-client-users+subscribe@googlegroups.com</subscribe>
-      <unsubscribe>zendesk-java-client-users+unsubscribe@googlegroups.com</unsubscribe>
-      <post>zendesk-java-client-users@googlegroups.com</post>
-      <archive>https://groups.google.com/forum/#!forum/zendesk-java-client-users</archive>
-    </mailingList>
-  </mailingLists>
+    <mailingLists>
+        <mailingList>
+            <name>Zendesk Java Client User List</name>
+            <subscribe>zendesk-java-client-users+subscribe@googlegroups.com</subscribe>
+            <unsubscribe>zendesk-java-client-users+unsubscribe@googlegroups.com</unsubscribe>
+            <post>zendesk-java-client-users@googlegroups.com</post>
+            <archive>https://groups.google.com/forum/#!forum/zendesk-java-client-users</archive>
+        </mailingList>
+    </mailingLists>
 
-  <prerequisites>
-    <maven>3.0.4</maven>
-  </prerequisites>
+    <prerequisites>
+        <maven>3.0.4</maven>
+    </prerequisites>
 
   <scm>
     <connection>scm:git:git://github.com/cloudbees-oss/zendesk-java-client.git</connection>
@@ -78,20 +79,21 @@
     <tag>HEAD</tag>
   </scm>
 
-  <issueManagement>
-    <system>github</system>
-    <url>https://github.com/cloudbees/zendesk-java-client/issues</url>
-  </issueManagement>
+    <issueManagement>
+        <system>github</system>
+        <url>https://github.com/cloudbees/zendesk-java-client/issues</url>
+    </issueManagement>
 
   <ciManagement>
     <system>codeship</system>
     <url>https://app.codeship.com/projects/302087</url>
   </ciManagement>
 
-  <properties>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-  </properties>
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <nexusUrl></nexusUrl>
+    </properties>
 
   <dependencyManagement>
     <dependencies>
@@ -285,5 +287,16 @@
       </build>
     </profile>
   </profiles>
+
+    <distributionManagement>
+        <repository>
+            <id>voxbone-nexus</id>
+            <url>${nexusUrl}/releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>voxbone-nexus</id>
+            <url>${nexusUrl}/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 </project>

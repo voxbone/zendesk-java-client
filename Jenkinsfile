@@ -28,10 +28,14 @@ node('regular') {
       stage("Checkout") {
         checkout scm
       }
-
-      stage("Run UT - ${getProjectKey(repo)}") {
+      stage("Run UT/IT - ${getProjectKey(repo)}") {
         withMaven(options: [artifactsPublisher(disabled: true), dependenciesFingerprintPublisher(disabled: true)], maven: 'maven') {
           sh "mvn -T 16C clean install -fae -U -q"
+        }
+      }
+      stage("Publish to nexus - ${getProjectKey(repo)}") {
+        withMaven(options: [artifactsPublisher(disabled: true), dependenciesFingerprintPublisher(disabled: true)], maven: 'maven') {
+          sh "mvn clean install -DskipTests -fae -U -q -DnexusUrl=${NEXUS_URL}"
         }
       }
     }

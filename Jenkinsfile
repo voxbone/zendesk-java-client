@@ -1,32 +1,47 @@
-pipeline {
-    environment {
-        ZENDESK_JAVA_CLIENT_TEST_URL             = credentials('ZENDESK_JAVA_CLIENT_TEST_URL')
-        ZENDESK_JAVA_CLIENT_TEST_USERNAME        = credentials('ZENDESK_JAVA_CLIENT_TEST_USERNAME')
-        ZENDESK_JAVA_CLIENT_TEST_PASSWORD        = credentials('ZENDESK_JAVA_CLIENT_TEST_PASSWORD')
-        ZENDESK_JAVA_CLIENT_TEST_TOKEN           = credentials('ZENDESK_JAVA_CLIENT_TEST_TOKEN')
-        ZENDESK_JAVA_CLIENT_TEST_REQUESTER_EMAIL = credentials('ZENDESK_JAVA_CLIENT_TEST_REQUESTER.EMAIL')
-        ZENDESK_JAVA_CLIENT_TEST_REQUESTER_NAME  = credentials('ZENDESK_JAVA_CLIENT_TEST_REQUESTER.NAME')
-    }
-    agent {
-        label "standard"
-    }
-    stages {
-        stage("Build") {
-            steps {
-                withSonarQubeEnv('sonarcloud.io') {
-                    withMaven(
-                            mavenOpts: '-Xmx512m -Djava.awt.headless=true'
-                    ) {
-                        sh "mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent ${env.BRANCH_NAME == 'master' && readMavenPom().version.contains('-SNAPSHOT') ? 'deploy -DdeployAtEnd=true' : 'verify'} sonar:sonar -Dsonar.organization=cloudbees -Dsonar.branch.name=\"${env.BRANCH_NAME}\" -Dmaven.test.failure.ignore=true"
-                    }
-                }
-            }
+#!groovy
+def repo = 'zendesk-java-client'
+properties(
+        [
+                [
+                        $class  : 'BuildDiscarderProperty',
+                        strategy: [$class: 'LogRotator', numToKeepStr: '3']
+                ],
+                pipelineTriggers([pollSCM('H/5 * * * *')]),
+                disableConcurrentBuilds(),
+        ]
+)
+
+@NonCPS
+def getProjectKey(repo) {
+    return repo + '_' + env.BRANCH_NAME.replaceAll("/", "_")
+}
+
+node('regular') {
+  stage("Initial clean-up") {
+    deleteDir()
+  }
+
+  ws("workspace/${getProjectKey(repo)}")
+  {
+    try
+    {
+      stage("Checkout") {
+        checkout scm
+      }
+
+      stage("Run UT - ${getProjectKey(repo)}") {
+        withMaven(options: [artifactsPublisher(disabled: true), dependenciesFingerprintPublisher(disabled: true)], maven: 'maven') {
+          sh "mvn -T 16C clean install -fae -U -q"
         }
+      }
     }
-    options {
-        // Keep 10 builds at a time
-        buildDiscarder(logRotator(numToKeepStr: '10'))
-        // Be sure that this build doesn't hang forever
-        timeout(time: 5, unit: 'MINUTES')
+    catch(e){
+      throw e
     }
+    finally {
+      stage("Cleanup") {
+        deleteDir()
+      }
+    }
+  }
 }

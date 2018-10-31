@@ -16,6 +16,19 @@ def getProjectKey(repo) {
     return repo + '_' + env.BRANCH_NAME.replaceAll("/", "_")
 }
 
+def shouldPublish() {
+    def snapshot = readMavenPom().version.contains('-SNAPSHOT')
+    if (env.BRANCH_NAME == 'master' && !snapshot)
+    {
+        return true
+    }
+    else if (env.BRANCH_NAME != 'master' && snapshot)
+    {
+        return true
+    }
+    return false
+}
+
 node('regular') {
   stage("Initial clean-up") {
     deleteDir()
@@ -34,8 +47,16 @@ node('regular') {
         }
       }
       stage("Publish to nexus - ${getProjectKey(repo)}") {
-        withMaven(options: [artifactsPublisher(disabled: true), dependenciesFingerprintPublisher(disabled: true)], maven: 'maven') {
-          sh "mvn clean install -DskipTests -fae -U -q -DnexusUrl=${NEXUS_URL}"
+
+        if (shouldPublish())
+        {
+            withMaven(options: [artifactsPublisher(disabled: true), dependenciesFingerprintPublisher(disabled: true)], maven: 'maven') {
+                sh "mvn clean deploy -DskipTests -fae -U -q -DnexusUrl=${NEXUS_URL}"
+            }
+        }
+        else
+        {
+            sh "echo 'Branch ${env.BRANCH_NAME} cannot publish this version of the artifact (only master can publish release version / other branches snapshots)'"
         }
       }
     }

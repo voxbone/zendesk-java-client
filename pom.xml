@@ -92,6 +92,7 @@
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <serverId>voxbone-nexus</serverId>
         <nexusUrl></nexusUrl>
     </properties>
 
@@ -283,6 +284,15 @@
               </execution>
             </executions>
           </plugin>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.5</version>
+                <extensions>true</extensions>
+                <configuration combine.self="override">
+                    <skipStaging>true</skipStaging>
+                </configuration>
+            </plugin>
         </plugins>
       </build>
     </profile>

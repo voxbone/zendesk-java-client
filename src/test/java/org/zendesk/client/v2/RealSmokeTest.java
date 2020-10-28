@@ -22,6 +22,7 @@ import org.zendesk.client.v2.model.DeletedTicket;
 import org.zendesk.client.v2.model.Field;
 import org.zendesk.client.v2.model.Group;
 import org.zendesk.client.v2.model.Identity;
+import org.zendesk.client.v2.model.ImportTicket;
 import org.zendesk.client.v2.model.JobResult;
 import org.zendesk.client.v2.model.JobStatus;
 import org.zendesk.client.v2.model.Organization;
@@ -49,6 +50,7 @@ import org.zendesk.client.v2.model.schedules.Interval;
 import org.zendesk.client.v2.model.schedules.Schedule;
 import org.zendesk.client.v2.model.targets.Target;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -60,6 +62,7 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -99,6 +102,7 @@ public class RealSmokeTest {
     private static final long CLOUDBEES_ORGANIZATION_ID = 360507899132L;
     private static final long PUBLIC_FORM_ID = 360000434032L;
     private static final Random RANDOM = new Random();
+    private static final String TICKET_DESCRIPTION = "Please ignore this ticket description";
     private static final String TICKET_COMMENT1 = "Please ignore this ticket";
     private static final String TICKET_COMMENT2 = "Yes ignore this ticket";
 
@@ -641,7 +645,7 @@ public class RealSmokeTest {
 
     @Test
     @Ignore("Don't spam zendesk")
-    public void importTickets() throws Exception {
+    public void importTickets_testMethodForVoxbone() throws Exception {
         createClientWithTokenOrPassword();
         assumeThat("Must have a requester email", config.getProperty("requester.email"), notNullValue());
         Ticket ticket;
@@ -672,7 +676,6 @@ public class RealSmokeTest {
         assertThat(ticket.getCreatedAt(), is(importTicket.getCreatedAt()));
         assertThat(instance.getTicketComments(ticket.getId()), notNullValue());
     }
-
 
     @Test
     public void lookupUserByEmail() throws Exception {
@@ -1814,7 +1817,7 @@ public class RealSmokeTest {
         final Ticket ticket = new Ticket(
                 new Ticket.Requester(config.getProperty("requester.name"), config.getProperty("requester.email")),
                 "[zendesk-java-client] This is a test " + UUID.randomUUID().toString(),
-                new Comment(TICKET_COMMENT1));
+                TICKET_DESCRIPTION);
         ticket.setCollaborators(Arrays.asList(new Collaborator("Bob Example", "bob@example.org"),
                 new Collaborator("Alice Example", "alice@example.org")));
         ticket.setTags(Arrays.asList("zendesk-java-client", "smoke-test"));

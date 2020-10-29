@@ -26,7 +26,7 @@
 
   <groupId>com.cloudbees.thirdparty</groupId>
   <artifactId>zendesk-java-client</artifactId>
-  <version>0.14.1-voxbone-0.0.3-SNAPSHOT</version>
+  <version>0.14.1-voxbone-0.0.3</version>
 
     <name>zendesk-java-client</name>
     <description>Java client for the Zendesk API</description>
